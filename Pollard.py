@@ -1,12 +1,11 @@
 import math
 
 def func_x(x, n):
-    x = x*x + 1 % n
-    return x
+    return (x**2 + 1) % n
 
 def pollard(n):
 
-    x0 = 1
+    x0 = 2
     x_j = x0
     d = 1
     
