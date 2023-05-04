@@ -40,6 +40,45 @@ def build_factor_base(n):
     factor_base = [-1] + primes
     return factor_base
 
+def is_smooth(num, factor_base):
+    smooth_number = []
+    for p in factor_base:
+        count = 0
+        if num < 0:
+            num *= -1
+            count += 1
+            smooth_number.append(1)
+            continue
+        elif num >= 0 and p == -1:
+            smooth_number.append(0)
+            continue
+        while num % p == 0:
+            num //= p        
+            count += 1
+        smooth_number.append(count % 2)
+    return smooth_number
+
+def find_smooth_numbers(n, factor_base):
+    a = [int(math.sqrt(n))]
+    v = [1]
+    u = [a[0]]
+    pre_b, b = 0, 1
+    smooth_numbers = []
+    for i in range(1, len(factor_base) + 1):
+        v.append((n - u[i - 1]**2) // v[i - 1])
+        a.append(int((math.sqrt(n) + u[i - 1]) // v[i]))
+        u.append(a[i] * v[i] - u[i - 1])
+        pre_b, b = b, (a[i-1]*b + pre_b) % n
+        prepare = b**2 % n
+        if prepare >= n // 2:
+            prepare -= n
+        smooth_numbers.append(is_smooth(prepare,factor_base))
+
+    return smooth_numbers
+
 n = 9073
 factor_base = build_factor_base(n)
 print(factor_base)
+
+smooth_numbers = find_smooth_numbers(n, factor_base)
+print(smooth_numbers)
