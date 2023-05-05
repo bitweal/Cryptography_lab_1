@@ -1,6 +1,4 @@
 ﻿import math
-import numpy as np
-import itertools
 
 def is_prime(num):
     if num < 2:
