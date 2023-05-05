@@ -35,8 +35,6 @@ def build_factor_base(n):
     for p in range(2, L):
         if is_prime(p) and legendre_symbol(n, p) == 1:
             primes.append(p)
-        if len(primes) >= 100:
-            break
     factor_base = [-1] + primes
     return factor_base
 
@@ -76,9 +74,89 @@ def find_smooth_numbers(n, factor_base):
 
     return smooth_numbers
 
+def mod2_col_sum(matrix, col1_idx, col2_idx):
+    for i in range(len(matrix[0])):
+        matrix[i][col2_idx] = (matrix[i][col2_idx] + matrix[i][col1_idx]) % 2
+
+    for i in matrix:
+        print(i)
+
+    print('-'*25)
+    return matrix
+
+def simplify_matrix(matrix):
+    rows, cols = len(matrix), len(matrix[0])
+    determinate_rows = [False for _ in range(rows)]
+
+    for j in range(cols):
+        found_one = False
+        for i in range(j, rows):
+            if matrix[i][j] == 1:      
+                found_one = True
+                posision_i = i
+                break
+
+        if found_one:
+            for i in range(cols):
+                if i != j and matrix[posision_i][i] == 1: 
+                    print('i-',i)
+                    mod2_col_sum(matrix, j, i)
+
+    for i in range(rows):
+        count = 0
+        for j in range(cols):
+            if matrix[i][j] == 1:
+                count += 1
+
+        if count > 1:
+            determinate_rows[i] = True
+
+
+    return matrix, determinate_rows
+
 n = 9073
 factor_base = build_factor_base(n)
 print(factor_base)
 
 smooth_numbers = find_smooth_numbers(n, factor_base)
-print(smooth_numbers)
+
+smooth_numbers = [[1,1,0,0], [1,1,0,1], [0,1,1,1], [0,0,1,0], [0,0,0,1]]
+
+for i in smooth_numbers:
+    print(i)
+
+
+print('++++++++++++++++++++++')
+
+matrix = simplify_matrix(smooth_numbers)
+
+
+print('++++++++++++++++++++++++++++++++++++++')
+for i in matrix[0]:
+    print(i)
+
+print(matrix[1])
+
+
+
+
+
+
+
+
+
+
+
+
+#import numpy as np
+#import itertools
+
+#matrix = np.array(matrix_x)
+#indices = []
+
+#for i in range(1, len(smooth_numbers) + 1):
+#    for combo in itertools.combinations(range(len(smooth_numbers)), i):
+#        if np.array_equal(np.sum(matrix[list(combo)], axis=0) % 2, np.zeros(len(smooth_numbers[0]), dtype=int)):
+#            indices.append(list(combo))
+                
+#print(indices)
