@@ -1,4 +1,6 @@
 ﻿import math
+import numpy as np
+import itertools
 
 def is_prime(num):
     if num < 2:
@@ -74,33 +76,31 @@ def find_smooth_numbers(n, factor_base):
 
     return smooth_numbers
 
-def mod2_col_sum(matrix, col1_idx, col2_idx):
+def col_xor(matrix, col1, col2):
     for i in range(len(matrix[0])):
-        matrix[i][col2_idx] = (matrix[i][col2_idx] + matrix[i][col1_idx]) % 2
+        matrix[i][col2] = (matrix[i][col2] + matrix[i][col1]) % 2
 
-    for i in matrix:
-        print(i)
-
-    print('-'*25)
+    #for i in matrix:
+        #print(i)
+   # print('-'*25)
     return matrix
 
 def simplify_matrix(matrix):
     rows, cols = len(matrix), len(matrix[0])
-    determinate_rows = [False for _ in range(rows)]
+    determinate_rows = -1 #[False for _ in range(rows)]
 
     for j in range(cols):
         found_one = False
         for i in range(j, rows):
             if matrix[i][j] == 1:      
                 found_one = True
-                posision_i = i
+                position_i = i
                 break
 
         if found_one:
             for i in range(cols):
-                if i != j and matrix[posision_i][i] == 1: 
-                    print('i-',i)
-                    mod2_col_sum(matrix, j, i)
+                if i != j and matrix[position_i][i] == 1: 
+                    col_xor(matrix, j, i)
 
     for i in range(rows):
         count = 0
@@ -109,54 +109,57 @@ def simplify_matrix(matrix):
                 count += 1
 
         if count > 1:
-            determinate_rows[i] = True
-
+            determinate_rows = i
 
     return matrix, determinate_rows
 
-n = 9073
+def find_zero_vectors(matrix, initial_vector):
+    rows, cols = len(matrix), len(matrix[0])   
+    result = [initial_vector]
+    remember_one = []
+    for i in range(cols):
+        if matrix[initial_vector][i] == 1:
+            remember_one.append(i)
+    for j in remember_one:
+        for i in range(rows):
+            if i != initial_vector and len(result) <= len(remember_one) and matrix[i][j] == 1:
+                result.append(i)
+
+
+                
+    return result
+
+n = 2485021628404193
 factor_base = build_factor_base(n)
 print(factor_base)
 
 smooth_numbers = find_smooth_numbers(n, factor_base)
 
-smooth_numbers = [[1,1,0,0], [1,1,0,1], [0,1,1,1], [0,0,1,0], [0,0,0,1]]
+#smooth_numbers = [[1,1,0,0], [1,1,0,1], [0,1,1,1], [0,0,1,0], [0,0,0,1]]
 
 for i in smooth_numbers:
     print(i)
 
+print('='*25)
 
-print('++++++++++++++++++++++')
+matrix, determinate = simplify_matrix(smooth_numbers)
 
-matrix = simplify_matrix(smooth_numbers)
+print('-'*25)
 
-
-print('++++++++++++++++++++++++++++++++++++++')
-for i in matrix[0]:
+for i in matrix:
     print(i)
 
-print(matrix[1])
+print('='*25)
 
+if determinate != -1:
+    print(find_zero_vectors(matrix, determinate))
+else:
+    matrix = np.array(matrix)
+    indices = []
 
-
-
-
-
-
-
-
-
-
-
-#import numpy as np
-#import itertools
-
-#matrix = np.array(matrix_x)
-#indices = []
-
-#for i in range(1, len(smooth_numbers) + 1):
-#    for combo in itertools.combinations(range(len(smooth_numbers)), i):
-#        if np.array_equal(np.sum(matrix[list(combo)], axis=0) % 2, np.zeros(len(smooth_numbers[0]), dtype=int)):
-#            indices.append(list(combo))
+    for i in range(1, len(smooth_numbers) + 1):
+        for combo in itertools.combinations(range(len(smooth_numbers)), i):
+            if np.array_equal(np.sum(matrix[list(combo)], axis=0) % 2, np.zeros(len(smooth_numbers[0]), dtype=int)):
+                indices.append(list(combo))
                 
-#print(indices)
+    print(indices)
