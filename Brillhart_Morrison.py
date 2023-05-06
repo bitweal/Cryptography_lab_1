@@ -40,21 +40,25 @@ def build_factor_base(n):
 
 def is_smooth(num, factor_base):
     smooth_number = []
+    power = []
     for p in factor_base:
         count = 0
         if num < 0:
             num *= -1
             count += 1
+            power.append(1)
             smooth_number.append(1)
             continue
         elif num >= 0 and p == -1:
+            power.append(0)
             smooth_number.append(0)
             continue
         while num % p == 0:
             num //= p        
             count += 1
+        power.append(count)
         smooth_number.append(count % 2)
-    return smooth_number
+    return smooth_number, power
 
 def find_smooth_numbers(n, factor_base):
     a = [int(math.sqrt(n))]
@@ -62,6 +66,9 @@ def find_smooth_numbers(n, factor_base):
     u = [a[0]]
     pre_b, b = 0, 1
     smooth_numbers = []
+    remember_b = []
+    power = []
+    powers_smooth_number = []
     for i in range(1, len(factor_base) + 1):
         v.append((n - u[i - 1]**2) // v[i - 1])
         a.append(int((math.sqrt(n) + u[i - 1]) // v[i]))
@@ -70,15 +77,15 @@ def find_smooth_numbers(n, factor_base):
         prepare = b**2 % n
         if prepare >= n // 2:
             prepare -= n
-        smooth_numbers.append(is_smooth(prepare,factor_base))
-    return smooth_numbers
+        remember_b.append(b)
+        smooth, powers_smooth_number = is_smooth(prepare,factor_base)
+        smooth_numbers.append(smooth)
+        power.append(powers_smooth_number)
+    return remember_b, smooth_numbers, power
 
 def col_xor(matrix, col1, col2):
     for i in range(len(matrix[0])):
         matrix[i][col2] = (matrix[i][col2] + matrix[i][col1]) % 2
-    #for i in matrix:
-        #print(i)
-   # print('-'*25)
     return matrix
 
 def simplify_matrix(matrix):
@@ -122,19 +129,19 @@ def find_zero_vectors(matrix, initial_vector):
                     result.append(combo)
                     combo = [initial_vector]
     else:
-        if combo != [initial_vector]:
+        if combo != [initial_vector] and len(combo) % 2 == 0:
             result.append(combo)
 
     return result
 
-n = 9073
-factor_base = build_factor_base(n)
-print(factor_base)
+def create_vectors():
+    n = int(input('Enter n: '))
+    factor_base = build_factor_base(n)
+    b, smooth_numbers, power = find_smooth_numbers(n, factor_base)
+    matrix, undeterminate = simplify_matrix(smooth_numbers)
 
-smooth_numbers = find_smooth_numbers(n, factor_base)
-matrix, undeterminate = simplify_matrix(smooth_numbers)
-
-if undeterminate is not None:
-    vector_index = find_zero_vectors(matrix, undeterminate)
-else:
-    print('I could not find solutions')
+    if undeterminate is not None:
+        vectors = find_zero_vectors(matrix, undeterminate)
+        return factor_base, b, vectors, power, n
+    else:
+        return TypeError('I could not find zero vectors')
