@@ -1,4 +1,5 @@
 ﻿import math
+from Brillhart_Morrison_search_solutions import find_result_x_y
 
 def is_prime(num):
     if num < 2:
@@ -29,7 +30,7 @@ def legendre_symbol(a, p):
             return legendre_symbol(p, a)
 
 def build_factor_base(n):
-    a = 1 / math.sqrt(2)
+    a = 2
     L = int(math.exp(math.sqrt(math.log(n) * math.log(math.log(n))))**a)
     primes = []
     for p in range(2, L):
@@ -84,16 +85,16 @@ def find_smooth_numbers(n, factor_base):
     return remember_b, smooth_numbers, power
 
 def col_xor(matrix, col1, col2):
-    for i in range(len(matrix[0])):
+    for i in range(len(matrix)):
         matrix[i][col2] = (matrix[i][col2] + matrix[i][col1]) % 2
     return matrix
 
 def simplify_matrix(matrix):
     rows, cols = len(matrix), len(matrix[0])
-    undeterminate = None
+    undeterminate = []
     for j in range(cols):
         found_one = False
-        for i in range(j, rows):
+        for i in range(rows):
             if matrix[i][j] == 1:      
                 found_one = True
                 position_i = i
@@ -108,40 +109,61 @@ def simplify_matrix(matrix):
             if matrix[i][j] == 1:
                 count += 1
         if count > 1:
-            undeterminate = i
+            undeterminate.append(i)
     return matrix, undeterminate
 
-def find_zero_vectors(matrix, initial_vector):
-    rows, cols = len(matrix), len(matrix[0])   
-    result = []
-    remember_one = []
-    for i in range(cols):
-        if matrix[initial_vector][i] == 1:
-            remember_one.append(i)
-
-    combo = [initial_vector]
-    for j in remember_one:
-        for i in range(rows):
-            if i != initial_vector and matrix[i][j] == 1:
-                if len(combo) <= len(remember_one):
+def find_zero_vectors(matrix, undeterminate, base, bi, powers, n):
+    cols = len(matrix[0])  
+    for index in undeterminate:   
+        result = []
+        remember_one = []
+        for i in range(cols):
+            if matrix[index][i] == 1:
+                remember_one.append(i)
+        result.append([index])
+        for j in remember_one:
+            combo = []
+            for i in range(index+1):
+                if i in undeterminate and undeterminate[i] == True:  
+                    continue
+                if i != index and matrix[i][j] == 1:
                     combo.append(i)
-                else:
-                    result.append(combo)
-                    combo = [initial_vector]
-    else:
-        if combo != [initial_vector] and len(combo) % 2 == 0:
+
             result.append(combo)
 
-    return result
+        undeterminate[index] = True
+        combinations = generate_combinations(result)
+        print(combinations)
+        x_y = find_result_x_y(base, bi, combinations, powers, n)  
+        if x_y == 1:
+            continue
+        else:
+            return x_y
+    return "I could not find solutions"
 
-def create_vectors():
-    n = int(input('Enter n: '))
-    factor_base = build_factor_base(n)
-    b, smooth_numbers, power = find_smooth_numbers(n, factor_base)
-    matrix, undeterminate = simplify_matrix(smooth_numbers)
 
-    if undeterminate is not None:
-        vectors = find_zero_vectors(matrix, undeterminate)
-        return factor_base, b, vectors, power, n
-    else:
-        return TypeError('I could not find zero vectors')
+def generate_combinations(result):
+    combinations = [[]]
+    for vector_list in result:
+        new_combinations = []
+        for combination in combinations:
+            for vector in vector_list:
+                new_combinations.append(combination + [vector])
+        combinations = new_combinations
+    return combinations
+
+
+n = int(input('Enter n: '))
+factor_base = build_factor_base(n)
+b, smooth_numbers, powers = find_smooth_numbers(n, factor_base)
+matrix, undeterminate = simplify_matrix(smooth_numbers)
+for qwe in matrix:
+    print(qwe)
+dict_undeterminate = {}
+for number in undeterminate:
+    dict_undeterminate[number] = False
+if dict_undeterminate:
+    x_y = find_zero_vectors(matrix, dict_undeterminate, factor_base, b, powers, n)
+    print(x_y)
+else:
+    print("qofjwoaio;waf")
