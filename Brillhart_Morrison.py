@@ -185,12 +185,17 @@ a = 1 / math.sqrt(2)
 while True:
     result = start(n,a)
     if result == -1:
-        a = float(input("Do you want to increase a and try again? Enter number or -1 "))
-        if a != -1.0:
+        if a < 1:
+            a += 0.1           
             continue
-        else:
+        answer = input("Do you want to increase a and try again? ")
+        print('a = ',a)
+        if  answer == 'No' or answer == 'no':
             print("goodbye")
             break
+        else:
+            a += 0.05           
+            continue
     else:
         print(result)
         break
