@@ -1,17 +1,14 @@
 import random
 
 # Miller Rabin
-
-
 def euclidean_algorithm(a, b):
     while b != 0:
         a, b = b, a % b
     return a
 
-
 def miller_rabin(n, k):
     if n <= 2:
-        return n == 2
+        return True
     r = 0
     d = n - 1
     while d % 2 == 0:
@@ -34,19 +31,20 @@ def miller_rabin(n, k):
 
 # Algorithm 2
 
-
 def factorize(n):
     factors = []
     i = 2
     while i * i <= n:
-        if n % i:
+        if n % i :
             i += 1
         else:
             n //= i
-            factors.append(i)
+            if i < 47:
+                factors.append(i)
+            else:
+                break
     if n > 1:
         factors.append(n)
     return factors
 
-
-print(factorize(156))
+#print(factorize(9073))
