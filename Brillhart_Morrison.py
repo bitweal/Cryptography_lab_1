@@ -1,5 +1,16 @@
 ﻿import math
+import time
 from Brillhart_Morrison_search_solutions import find_result_x_y
+
+def timeit_decorator(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        execution_time = end_time - start_time
+        print("The function {} was executed in {:.2f} seconds".format(func.__name__, execution_time))
+        return result
+    return wrapper
 
 def is_prime(num):
     if num < 2:
@@ -29,6 +40,7 @@ def legendre_symbol(a, p):
         else:
             return legendre_symbol(p, a)
 
+@timeit_decorator
 def build_factor_base(n, a):
     L = int(math.exp(math.sqrt(math.log(n) * math.log(math.log(n))))**a)
     primes = []
@@ -60,6 +72,7 @@ def is_smooth(num, factor_base):
         smooth_number.append(count % 2)
     return smooth_number, power
 
+@timeit_decorator
 def find_smooth_numbers(n, factor_base):
     a = [int(math.sqrt(n))]
     v = [1]
@@ -88,6 +101,7 @@ def col_xor(matrix, col1, col2):
         matrix[i][col2] = (matrix[i][col2] + matrix[i][col1]) % 2
     return matrix
 
+@timeit_decorator
 def simplify_matrix(matrix):
     rows, cols = len(matrix), len(matrix[0])
     undeterminate = []
@@ -111,6 +125,7 @@ def simplify_matrix(matrix):
             undeterminate.append(i)
     return matrix, undeterminate
 
+@timeit_decorator
 def find_zero_vectors(matrix, undeterminate, base, bi, powers, n):
     cols = len(matrix[0])  
     for index in undeterminate:   
@@ -149,6 +164,7 @@ def generate_combinations(result):
         combinations = new_combinations
     return combinations
 
+@timeit_decorator
 def start(n ,a):
     factor_base = build_factor_base(n, a)
     b, smooth_numbers, powers = find_smooth_numbers(n, factor_base)
