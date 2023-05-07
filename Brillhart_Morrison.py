@@ -29,8 +29,7 @@ def legendre_symbol(a, p):
         else:
             return legendre_symbol(p, a)
 
-def build_factor_base(n):
-    a = 2
+def build_factor_base(n, a):
     L = int(math.exp(math.sqrt(math.log(n) * math.log(math.log(n))))**a)
     primes = []
     for p in range(2, L):
@@ -133,13 +132,13 @@ def find_zero_vectors(matrix, undeterminate, base, bi, powers, n):
 
         undeterminate[index] = True
         combinations = generate_combinations(result)
-        print(combinations)
-        x_y = find_result_x_y(base, bi, combinations, powers, n)  
-        if x_y == 1:
+        x_y = find_result_x_y(base, bi, combinations, powers, n)
+        print(x_y)
+        if x_y == 'no solutions':
             continue
         else:
             return x_y
-    return "I could not find solutions"
+    return -1
 
 
 def generate_combinations(result):
@@ -152,18 +151,33 @@ def generate_combinations(result):
         combinations = new_combinations
     return combinations
 
+def start(n ,a):
+    factor_base = build_factor_base(n, a)
+    b, smooth_numbers, powers = find_smooth_numbers(n, factor_base)
+    matrix, undeterminate = simplify_matrix(smooth_numbers)
+    dict_undeterminate = {}
+    for number in undeterminate:
+        dict_undeterminate[number] = False
+
+    if dict_undeterminate:
+        x_y = find_zero_vectors(matrix, dict_undeterminate, factor_base, b, powers, n)
+        return x_y        
+    else:
+        return -1
+
 
 n = int(input('Enter n: '))
-factor_base = build_factor_base(n)
-b, smooth_numbers, powers = find_smooth_numbers(n, factor_base)
-matrix, undeterminate = simplify_matrix(smooth_numbers)
-for qwe in matrix:
-    print(qwe)
-dict_undeterminate = {}
-for number in undeterminate:
-    dict_undeterminate[number] = False
-if dict_undeterminate:
-    x_y = find_zero_vectors(matrix, dict_undeterminate, factor_base, b, powers, n)
-    print(x_y)
-else:
-    print("qofjwoaio;waf")
+a = 1 / math.sqrt(2)
+
+while True:
+    result = start(n,a)
+    if result == -1:
+        a = float(input("Do you want to increase a and try again? Enter number or -1 "))
+        if a != -1.0:
+            continue
+        else:
+            print("goodbye")
+            break
+    else:
+        print(result)
+        break
