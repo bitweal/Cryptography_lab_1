@@ -133,13 +133,11 @@ def find_zero_vectors(matrix, undeterminate, base, bi, powers, n):
         undeterminate[index] = True
         combinations = generate_combinations(result)
         x_y = find_result_x_y(base, bi, combinations, powers, n)
-        print(x_y)
         if x_y == 'no solutions':
             continue
         else:
             return x_y
     return -1
-
 
 def generate_combinations(result):
     combinations = [[]]
@@ -164,7 +162,6 @@ def start(n ,a):
         return x_y        
     else:
         return -1
-
 
 n = int(input('Enter n: '))
 a = 1 / math.sqrt(2)
