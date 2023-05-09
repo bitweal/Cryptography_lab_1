@@ -40,6 +40,7 @@ def legendre_symbol(a, p):
         else:
             return legendre_symbol(p, a)
 
+@timeit_decorator
 def build_factor_base(n, a):
     L = int(math.exp(math.sqrt(math.log(n) * math.log(math.log(n))))**a)
     primes = []
@@ -49,6 +50,7 @@ def build_factor_base(n, a):
     factor_base = [-1] + primes
     return factor_base
 
+@timeit_decorator
 def is_smooth(num, factor_base):
     smooth_number = []
     power = []
@@ -70,6 +72,7 @@ def is_smooth(num, factor_base):
         power.append(count)
         smooth_number.append(count % 2)
     return smooth_number, power
+
 
 def find_smooth_numbers(n, factor_base):
     a = [int(math.sqrt(n))]
@@ -99,6 +102,7 @@ def col_xor(matrix, col1, col2):
         matrix[i][col2] = (matrix[i][col2] + matrix[i][col1]) % 2
     return matrix
 
+@timeit_decorator
 def simplify_matrix(matrix):
     rows, cols = len(matrix), len(matrix[0])
     undeterminate = []
@@ -122,6 +126,7 @@ def simplify_matrix(matrix):
             undeterminate.append(i)
     return matrix, undeterminate
 
+@timeit_decorator
 def find_zero_vectors(matrix, undeterminate, base, bi, powers, n):
     cols = len(matrix[0])  
     for index in undeterminate:   
@@ -138,7 +143,7 @@ def find_zero_vectors(matrix, undeterminate, base, bi, powers, n):
                     continue
                 if i != index and matrix[i][j] == 1:
                     combo.append(i)
-
+                    break
             result.append(combo)
 
         undeterminate[index] = True
@@ -175,25 +180,25 @@ def start(n ,a):
     else:
         return -1
 
-#n = int(input('Enter n: '))
-#a = 1 / math.sqrt(2)
+n = int(input('Enter n: '))
+a = 1 / math.sqrt(2)
 
-#while True:
-#    result = start(n,a)
-#    if result == -1:
-#        if a < 1:
-#            a += 0.01  
-#            print('a = ',a)
-#            continue
-#        answer = input("Do you want to increase a and try again? ")
-#        print('a = ',a)
-#        if  answer == 'No' or answer == 'no':
-#            print("goodbye")            
-#            break
-#        else:
-#            a += 0.05           
-#            continue
-#    else:
-#        print(result)
-#        x = input()
-#        break
+while True:
+    result = start(n,a)
+    if result == -1:
+        if a < 1.5:
+            a += 0.1  
+            print('a = ',a)
+            continue
+        answer = input("Do you want to increase a and try again? ")
+        print('a = ',a)
+        if  answer == 'No' or answer == 'no':
+            print("goodbye")            
+            break
+        else:
+            a += 0.5          
+            continue
+    else:
+        print(result)
+        x = input()
+        break

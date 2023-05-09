@@ -9,12 +9,12 @@ def find_result_x_y(factor_base, b, vectors, powers, n):
             x *= b[all_index]
             for p in range(len(powers[all_index])):
                 if powers[all_index][p] != 0:
-                    y *= factor_base[p]**powers[all_index][p]
-        i += 1
+                    y *= factor_base[p]**powers[all_index][p]      
         x = x % n
         y = int(math.sqrt(y) % n)
         first = math.gcd(x+y,n)
         second = math.gcd(x-y,n)
         if first > 1 and first < n and second > 1 and second < n:
-              return first,second
+            return first,second
+        i += 1
     return 'no solutions'
