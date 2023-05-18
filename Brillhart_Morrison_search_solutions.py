@@ -1,8 +1,7 @@
 import math
 
-def find_result_x_y(factor_base, b, vectors, powers, n):
-    for vector in vectors:
-        i = 0
+def find_result_x_y(factor_base, b, vectors, powers, n): 
+    for vector in vectors: 
         x = 1
         y = 1
         for all_index in vector:
@@ -14,7 +13,6 @@ def find_result_x_y(factor_base, b, vectors, powers, n):
         y = int(math.sqrt(y) % n)
         first = math.gcd(x+y,n)
         second = math.gcd(x-y,n)
-        if first > 1 and first < n and second > 1 and second < n:
+        if first > 1 and first < n and second > 1 and second < n and first != second:
             return first,second
-        i += 1
     return 'no solutions'
