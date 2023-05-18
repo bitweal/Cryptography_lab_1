@@ -174,9 +174,6 @@ def start(n ,a = 1 / math.sqrt(2)):
     else:
         return -1
 
-#n = int(input('Enter n: '))
-#a = 1 / math.sqrt(2)
-
 @timeit_decorator
 def brillhart_morrison(n,a=1 / math.sqrt(2)):
     while True:
@@ -198,3 +195,7 @@ def brillhart_morrison(n,a=1 / math.sqrt(2)):
             #print(result)
             #x = input()
             return result
+
+n = int(input('Enter n: '))
+a = 1 / math.sqrt(2)
+print(brillhart_morrison(n,a))
