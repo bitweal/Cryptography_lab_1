@@ -1,4 +1,4 @@
-import random
+﻿import random
 
 # Miller Rabin
 def euclidean_algorithm(a, b):
@@ -34,17 +34,14 @@ def miller_rabin(n, k):
 def factorize(n):
     factors = []
     i = 2
-    while i * i <= n:
-        if n % i :
+    while i * i <= n and i <= 47:
+        if n % i:
             i += 1
         else:
             n //= i
-            if i < 47:
-                factors.append(i)
-            else:
-                break
-    if n > 1:
-        factors.append(n)
+            factors.append(i)
+    #if n > 1:
+    #    factors.append(n)
     return factors
 
 #print(factorize(9073))

@@ -161,7 +161,7 @@ def generate_combinations(result):
     return combinations
 
 @timeit_decorator
-def start(n ,a):
+def start(n ,a = 1 / math.sqrt(2)):
     factor_base = build_factor_base(n, a)
     b, smooth_numbers, powers = find_smooth_numbers(n, factor_base)
     matrix, undeterminate = simplify_matrix(smooth_numbers)
