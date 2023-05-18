@@ -71,7 +71,6 @@ def is_smooth(num, factor_base):
         smooth_number.append(count % 2)
     return smooth_number, power
 
-
 def find_smooth_numbers(n, factor_base):
     a = [int(math.sqrt(n))]
     v = [1]
@@ -159,7 +158,6 @@ def generate_combinations(result):
                 new_combinations.append(combination + [vector])
         combinations = new_combinations
     return combinations
-
 
 def start(n ,a = 1 / math.sqrt(2)):
     factor_base = build_factor_base(n, a)

@@ -30,7 +30,6 @@ def miller_rabin(n, k):
     return True
 
 # Algorithm 2
-
 def factorize(n):
     factors = []
     i = 2
@@ -43,5 +42,3 @@ def factorize(n):
     #if n > 1:
     #    factors.append(n)
     return factors
-
-#print(factorize(9073))
