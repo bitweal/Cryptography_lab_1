@@ -196,6 +196,6 @@ def brillhart_morrison(n,a=1 / math.sqrt(2)):
             #x = input()
             return result
 
-n = int(input('Enter n: '))
-a = 1 / math.sqrt(2)
-print(brillhart_morrison(n,a))
+#n = int(input('Enter n: '))
+#a = 1 / math.sqrt(2)
+#print(brillhart_morrison(n,a))
