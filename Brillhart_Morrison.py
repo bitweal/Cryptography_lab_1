@@ -160,7 +160,7 @@ def generate_combinations(result):
         combinations = new_combinations
     return combinations
 
-@timeit_decorator
+
 def start(n ,a = 1 / math.sqrt(2)):
     factor_base = build_factor_base(n, a)
     b, smooth_numbers, powers = find_smooth_numbers(n, factor_base)
@@ -177,22 +177,24 @@ def start(n ,a = 1 / math.sqrt(2)):
 #n = int(input('Enter n: '))
 #a = 1 / math.sqrt(2)
 
-#while True:
-#    result = start(n,a)
-#    if result == -1:
-#        if a < 1.5:
-#            a += 0.1  
-#            print('a = ',a)
-#            continue
-#        answer = input("Do you want to increase a and try again? ")
-#        print('a = ',a)
-#        if  answer == 'No' or answer == 'no':
-#            print("goodbye")            
-#            break
-#        else:
-#            a += 0.5          
-#            continue
-#    else:
-#        print(result)
-#        x = input()
-#        break
+@timeit_decorator
+def brillhart_morrison(n,a=1 / math.sqrt(2)):
+    while True:
+        result = start(n,a)
+        if result == -1:
+            if a < 1.5:
+                a += 0.1  
+                print('a = ',a)
+                continue
+            answer = input("Do you want to increase a and try again? ")
+            print('a = ',a)
+            if  answer == 'No' or answer == 'no':
+                print("goodbye")            
+                return -1
+            else:
+                a += 0.1        
+                continue
+        else:
+            #print(result)
+            #x = input()
+            return result
